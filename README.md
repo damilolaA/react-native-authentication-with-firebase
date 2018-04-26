@@ -1,0 +1,1 @@
+A react-native authentication application using firebase as data store. 
