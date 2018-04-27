@@ -14,20 +14,37 @@ class LoginForm extends Component {
 		}
 
 		this.onButtonPress = this.onButtonPress.bind(this);
+		this.showButton = this.showButton.bind(this);
 	}
 
 	onButtonPress() {
-		this.setState({error: '', loading: true});
-
 		const { email, password } = this.state;
 
+		this.setState({error: '', loading: true});
+
 		firebase.auth().signInWithEmailAndPassword(email, password)
+			.then(this.onLoginSuccess.bind(this))
 			.catch(() => {
 				firebase.auth().createUserWithEmailAndPassword(email, password)
-					.catch(() => {
-						this.setState({error: 'Authentication failed'})
-					});
-			});
+					.then(this.onLoginSuccess.bind(this))
+					.catch(this.onLoginFail.bind(this))
+			})
+	}
+
+	onLoginFail() {
+		this.setState({
+			error: 'Authentication failed', 
+			loading: false
+		});
+	}
+
+	onLoginSuccess() {
+		this.setState({
+			email: '',
+			password: '',
+			loading: false,
+			error: ''
+		});
 	}
 
 	showButton() {
@@ -69,7 +86,7 @@ class LoginForm extends Component {
 				</Text>
 
 				<CardSection>
-					this.showButton();
+					{this.showButton()}
 				</CardSection>
 			</Card>
 		);
