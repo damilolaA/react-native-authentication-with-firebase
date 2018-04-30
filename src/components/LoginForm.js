@@ -33,7 +33,7 @@ class LoginForm extends Component {
 
 	onLoginFail() {
 		this.setState({
-			error: 'Authentication failed', 
+			error: 'authentication failed', 
 			loading: false
 		});
 	}
